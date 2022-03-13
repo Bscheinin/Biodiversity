@@ -69,43 +69,48 @@ function buildCharts(sample) {
     var otu_labels = firstSample.otu_labels
     var sample_values = firstSample.sample_values
     
+    var filtered_otu_ids = otu_ids.slice(0.10).reverse();
+    var filtered_otu_labels = otu_labels.slice(0,10).reverse();
+    var filtered_sample_values = sample_values.slice(0,10).reverse();
     
     // 7. Create the yticks for the bar chart.
        var yticksBar = otu_ids.slice(0,10).map(otu_id => `OTU ${otu_id}`).reverse();
 
     // 8. Create the trace for the bar chart. 
     var barData = [{
-        x: sample_values.slice(0,10).reverse(),
+        x: filtered_sample_values,
         y: yticksBar,
         type: 'bar',
         orientation: 'h',
-        text: otu_labels.slice(0,10).reverse(),
+        text: filtered_otu_labels,
       }];
       
     // 9. Create the layout for the bar chart. 
     var barLayout = {
-        title: "Top 10 Bacteria"
+        title: "Top 10 Bacteria for this Individual"
      
     };
     // 10. Use Plotly to plot the data with the layout. 
     Plotly.newPlot('bar', barData, barLayout);
 
     var bubble = [{
-        x: otu_ids,
-        y: sample_values,
-        text: otu_labels,
+        x: filtered_otu_ids,
+        y: filtered_sample_values,
+        text: filtered_otu_labels,
         mode: 'markers',
         marker: {
-            size: [40, 60, 80, 100]
+            size: filtered_sample_values,
+            // color: 
             }
         }];        
         
-        var bubbleLayout = {
-            title: 'Marker Size',
-            showlegend: false,
-            height: 600,
-            width: 600
-        };
+    var bubbleLayout = {
+      title: "Sample Values of Bacteria Found for the Selected Individual",
+      // xaxis: { title: "Sample Strength"},
+      // yaxis: { title: "Number of Samples"},
+      height: 600,
+      width: 1100,
+    };
     Plotly.newPlot('bubble', bubble, bubbleLayout);
   });
 }
