@@ -33,6 +33,7 @@ function optionChanged(newSample) {
 function buildMetadata(sample) {
   d3.json("samples.json").then((data) => {
     var metadata = data.metadata;
+
     // Filter the data for the object with the desired sample number
     var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
     var result = resultArray[0];
@@ -66,7 +67,7 @@ function buildCharts(sample) {
     var otu_ids = firstSample.otu_ids
     var otu_labels = firstSample.otu_labels
     var sample_values = firstSample.sample_values
-    var washfreq = parseFloat(firstSample.wfreq);
+    // var washFreq = parseFloat(firstSample.wfreq);
     
     var filtered_otu_ids = otu_ids.slice(0.10).reverse();
     var filtered_otu_labels = otu_labels.slice(0,10).reverse();
@@ -112,15 +113,24 @@ function buildCharts(sample) {
       width: 1100,
     };
     Plotly.newPlot('bubble', bubble, bubbleLayout);
-    
+
+//Create a variable that holds the washing frequency.
+    var gauge = data.metadata;
+      // Filter the data for the object with the desired sample number
+    var gaugeArray = gauge.filter(sampleObj => sampleObj.id == sample);
+    var gaugeResult = gaugeArray[0]
+    var washFreq= parseFloat(gaugeResult.wfreq);
+   
     var gaugeData = [
       {
         domain: { x: [0, 1], y: [0, 1] },
-        value: washfreq,
+        value: washFreq,
         title: { text: "Belly Button Washing Frequency" },
         type: "indicator",
         mode: "gauge+number",
         gauge: {
+          axis: {range: [null, 10]},
+          bar: {color: "black"},
           steps: [
             {range: [0,2], color: "red"},
             {range: [2,4], color: "orange"},
@@ -128,10 +138,9 @@ function buildCharts(sample) {
             {range: [6,8], color: "limegreen"},
             {range: [8,10], color: "green"},
           ],
-          axis: {range: [null, 10]},
-          bar: {color: "black"},
         },
-      }] 
+      }
+    ]; 
 
     var gaugeLayout = [{
       width: 600, 

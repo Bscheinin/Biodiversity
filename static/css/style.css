@@ -1,0 +1,12 @@
+body {
+
+    color: #050505; 
+  }
+.jumbotron {
+
+  background-image: url('../images/Biodiversity.jpg');
+background-size: cover;
+text-align: center;
+color: #f7ea39; 
+text-shadow: 2px 2px rgb(0, 12, 0);
+} 
