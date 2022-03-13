@@ -68,6 +68,8 @@ function buildCharts(sample) {
     var otu_ids = firstSample.otu_ids
     var otu_labels = firstSample.otu_labels
     var sample_values = firstSample.sample_values
+    // var washfreq = parseFloat(metadata.wfreq);
+    var frequency = parseFloat(metadata.wfreq);
     
     var filtered_otu_ids = otu_ids.slice(0.10).reverse();
     var filtered_otu_labels = otu_labels.slice(0,10).reverse();
@@ -100,17 +102,72 @@ function buildCharts(sample) {
         mode: 'markers',
         marker: {
             size: filtered_sample_values,
-            // color: 
+            color: otu_ids,
+            colorscale: "Earth"
             }
         }];        
         
     var bubbleLayout = {
-      title: "Sample Values of Bacteria Found for the Selected Individual",
-      // xaxis: { title: "Sample Strength"},
+      title: "Bacteria Cultures per Sample",
+      xaxis: { title: "OUT ID"},
       // yaxis: { title: "Number of Samples"},
       height: 600,
       width: 1100,
     };
     Plotly.newPlot('bubble', bubble, bubbleLayout);
+    
+    var gaugeData = [
+      {
+        domain: { x: [0, 1], y: [0, 1] },
+        value: frequency,
+        title: { text: "<b>Belly Button Washing Frequency</b> <br> Scrubs per Week"},
+        type: "indicator",
+        mode: "gauge+number",
+        gauge: {
+          axis: { range: [null, 10] },
+          bar: { color: "black"},
+          steps: [
+            { range: [0, 2], color: "red" },
+            { range: [2, 4], color: "orange" },
+            { range: [4, 6], color: "yellow" },
+            { range: [6, 8], color: "yellowgreen" },
+            { range: [8, 10], color: "green" }
+          ],
+        }
+      }
+    ]; 
+    var gaugeLayout = {
+      width: 500,
+      height: 425,
+      margin: { t: 0, b: 0 } };
+    // 6. Use Plotly to plot the gauge data and layout.
+    Plotly.newPlot("gauge", gaugeData, gaugeLayout);
   });
-}
+ }
+//     var gaugeData = [
+//       {
+//         domain: { x: [0, 1], y: [0, 1] },
+//         value: washfreq,
+//         title: { text: "Belly Button Washing Frequency" },
+//         type: "indicator",
+//         mode: "gauge+number",
+//         gauge: {
+//           steps: [
+//             {range: [0,2], color: "red"},
+//             {range: [2,4], color: "orange"},
+//             {range: [4,6], color: "yellow"},
+//             {range: [6,8], color: "limegreen"},
+//             {range: [8,10], color: "green"},
+//           ],
+//           axis: {range: [null, 10]},
+//           bar: {color: "black"},
+//         },
+//       }] 
+
+//     var gaugeLayout = [{
+//       width: 600, 
+//       height: 500, 
+//       margin: { t: 0, b: 0 } }];
+//   Plotly.newPlot('gauge', gaugeData, gaugeLayout);
+//   });
+// }
